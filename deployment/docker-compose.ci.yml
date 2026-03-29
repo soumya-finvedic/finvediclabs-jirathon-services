@@ -1,0 +1,36 @@
+services:
+  frontend:
+    image: ${REGISTRY}/${IMAGE_NAMESPACE}/frontend:${IMAGE_TAG}
+
+  auth-service:
+    image: ${REGISTRY}/${IMAGE_NAMESPACE}/auth-service:${IMAGE_TAG}
+
+  user-service:
+    image: ${REGISTRY}/${IMAGE_NAMESPACE}/user-service:${IMAGE_TAG}
+
+  organization-service:
+    image: ${REGISTRY}/${IMAGE_NAMESPACE}/organization-service:${IMAGE_TAG}
+
+  contest-service:
+    image: ${REGISTRY}/${IMAGE_NAMESPACE}/contest-service:${IMAGE_TAG}
+
+  execution-service:
+    image: ${REGISTRY}/${IMAGE_NAMESPACE}/execution-service:${IMAGE_TAG}
+
+  leaderboard-service:
+    image: ${REGISTRY}/${IMAGE_NAMESPACE}/leaderboard-service:${IMAGE_TAG}
+
+  payment-service:
+    image: ${REGISTRY}/${IMAGE_NAMESPACE}/payment-service:${IMAGE_TAG}
+
+  notification-service:
+    image: ${REGISTRY}/${IMAGE_NAMESPACE}/notification-service:${IMAGE_TAG}
+
+  ai-evaluation-service:
+    image: ${REGISTRY}/${IMAGE_NAMESPACE}/ai-evaluation-service:${IMAGE_TAG}
+    healthcheck:
+      test: ["CMD", "wget", "-qO-", "http://localhost:8090/health"]
+      interval: 30s
+      timeout: 5s
+      retries: 3
+      start_period: 20s

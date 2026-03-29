@@ -1,0 +1,10 @@
+# Auth Service — Jirathon
+
+target/
+*.class
+*.jar
+*.log
+.env
+.idea/
+*.iml
+.DS_Store

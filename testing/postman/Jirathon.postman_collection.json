@@ -1,0 +1,158 @@
+{
+  "info": {
+    "name": "Jirathon API",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "description": "Core API and workflow tests for Jirathon services"
+  },
+  "item": [
+    {
+      "name": "Health",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "{{baseUrl}}/health",
+          "host": ["{{baseUrl}}"],
+          "path": ["health"]
+        }
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "pm.test('Health status is 200', function () {",
+              "    pm.response.to.have.status(200);",
+              "});"
+            ],
+            "type": "text/javascript"
+          }
+        }
+      ]
+    },
+    {
+      "name": "Payment - Initiate",
+      "request": {
+        "method": "POST",
+        "header": [
+          { "key": "Content-Type", "value": "application/json" }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"registrationId\": \"reg-1001\",\n  \"contestId\": \"contest-100\",\n  \"userId\": \"user-100\",\n  \"name\": \"Jane Doe\",\n  \"email\": \"jane@example.com\",\n  \"phone\": \"9999999999\",\n  \"amount\": 1000,\n  \"couponCode\": \"SAVE10\"\n}"
+        },
+        "url": {
+          "raw": "{{baseUrl}}/api/payments/initiate",
+          "host": ["{{baseUrl}}"],
+          "path": ["api", "payments", "initiate"]
+        }
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "pm.test('Payment initiate returns 200', function () {",
+              "    pm.response.to.have.status(200);",
+              "});",
+              "const json = pm.response.json();",
+              "pm.test('Response indicates success', function () {",
+              "    pm.expect(json.success).to.eql(true);",
+              "});",
+              "if (json.data && json.data.transactionId) {",
+              "    pm.environment.set('transactionId', json.data.transactionId);",
+              "}"
+            ],
+            "type": "text/javascript"
+          }
+        }
+      ]
+    },
+    {
+      "name": "Payment - Get by Transaction",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "{{baseUrl}}/api/payments/{{transactionId}}",
+          "host": ["{{baseUrl}}"],
+          "path": ["api", "payments", "{{transactionId}}"]
+        }
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "pm.test('Payment lookup returns 200', function () {",
+              "    pm.response.to.have.status(200);",
+              "});"
+            ],
+            "type": "text/javascript"
+          }
+        }
+      ]
+    },
+    {
+      "name": "Leaderboard - Global",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "{{baseUrl}}/api/leaderboards/global?offset=0&limit=20",
+          "host": ["{{baseUrl}}"],
+          "path": ["api", "leaderboards", "global"],
+          "query": [
+            { "key": "offset", "value": "0" },
+            { "key": "limit", "value": "20" }
+          ]
+        }
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "pm.test('Leaderboard endpoint returns 200', function () {",
+              "    pm.response.to.have.status(200);",
+              "});"
+            ],
+            "type": "text/javascript"
+          }
+        }
+      ]
+    },
+    {
+      "name": "Webhook - PayU",
+      "request": {
+        "method": "POST",
+        "header": [
+          { "key": "X-Payu-Secret", "value": "{{payuWebhookSecret}}" }
+        ],
+        "url": {
+          "raw": "{{baseUrl}}/api/payments/webhooks/payu?txnid={{payuTxnId}}&status=success&payment_id=payu-1",
+          "host": ["{{baseUrl}}"],
+          "path": ["api", "payments", "webhooks", "payu"],
+          "query": [
+            { "key": "txnid", "value": "{{payuTxnId}}" },
+            { "key": "status", "value": "success" },
+            { "key": "payment_id", "value": "payu-1" }
+          ]
+        }
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "pm.test('Webhook endpoint responds success/failure contract', function () {",
+              "    pm.expect([200, 400, 401, 500]).to.include(pm.response.code);",
+              "});"
+            ],
+            "type": "text/javascript"
+          }
+        }
+      ]
+    }
+  ]
+}

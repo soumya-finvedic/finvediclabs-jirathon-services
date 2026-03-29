@@ -1,0 +1,80 @@
+spring:
+  application:
+    name: notification-service
+  
+  profiles:
+    active: dev
+  
+  data:
+    mongodb:
+      uri: mongodb://mongodb:27017/notification_db
+      auto-index-creation: true
+  
+  kafka:
+    bootstrap-servers: kafka:29092
+    consumer:
+      group-id: notification-service
+      auto-offset-reset: earliest
+      max-poll-records: 10
+    producer:
+      acks: all
+      retries: 3
+  
+  mail:
+    host: smtp.gmail.com
+    port: 587
+    username: ${MAIL_USERNAME:}
+    password: ${MAIL_PASSWORD:}
+    default-encoding: UTF-8
+    protocol: smtp
+    properties:
+      mail:
+        smtp:
+          auth: true
+          starttls:
+            enable: true
+            required: true
+          connectiontimeout: 5000
+          timeout: 5000
+          writetimeout: 5000
+  
+  jpa:
+    open-in-view: false
+  
+  webflux:
+    base-path: /api/v1
+
+server:
+  port: 8085
+  servlet:
+    context-path: /
+  compression:
+    enabled: true
+
+app:
+  email:
+    from: noreply@jirathon.com
+    from-name: Jirathon
+
+kafka:
+  topics:
+    payment-success: payment.success
+    registration-confirmed: registration.confirmed
+    contest-start: contest.start
+    contest-end: contest.end
+
+logging:
+  level:
+    root: INFO
+    com.jirathon: DEBUG
+  pattern:
+    console: "%d{yyyy-MM-dd HH:mm:ss} - %msg%n"
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info,metrics
+  endpoint:
+    health:
+      show-details: when-authorized

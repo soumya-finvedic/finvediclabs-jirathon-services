@@ -1,0 +1,37 @@
+server:
+  port: 8086
+
+spring:
+  application:
+    name: execution-service
+
+jwt:
+  secret: ${JWT_SECRET:dGhpc0lzQVNlY3VyZUtleUZvckRldmVsb3BtZW50T25seURvTm90VXNlSW5Qcm9k}
+  issuer: jirathon-auth
+
+execution:
+  docker-enabled: ${EXECUTION_DOCKER_ENABLED:true}
+  request-timeout-ms: ${EXECUTION_REQUEST_TIMEOUT_MS:10000}
+  default-time-limit-ms: ${EXECUTION_DEFAULT_TIME_LIMIT_MS:2000}
+  max-time-limit-ms: ${EXECUTION_MAX_TIME_LIMIT_MS:10000}
+  default-memory-limit-mb: ${EXECUTION_DEFAULT_MEMORY_LIMIT_MB:128}
+  max-memory-limit-mb: ${EXECUTION_MAX_MEMORY_LIMIT_MB:512}
+  max-code-size-bytes: ${EXECUTION_MAX_CODE_SIZE_BYTES:100000}
+  max-input-size-bytes: ${EXECUTION_MAX_INPUT_SIZE_BYTES:20000}
+  max-output-size-bytes: ${EXECUTION_MAX_OUTPUT_SIZE_BYTES:65536}
+  languages:
+    java: eclipse-temurin:17-jdk-alpine
+    python: python:3.11-alpine
+    cpp: gcc:13
+    javascript: node:20-alpine
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info,metrics
+
+logging:
+  level:
+    com.jirathon.execution: INFO
+    org.springframework.security: WARN

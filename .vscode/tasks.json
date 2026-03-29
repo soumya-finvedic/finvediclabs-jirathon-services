@@ -1,0 +1,186 @@
+{
+	"version": "2.0.0",
+	"tasks": [
+		{
+			"label": "Run auth-service",
+			"type": "shell",
+			"command": "mvn",
+			"args": [
+				"-f",
+				"backend/auth-service/pom.xml",
+				"spring-boot:run"
+			],
+			"isBackground": true,
+			"group": "build"
+		},
+		{
+			"label": "Run auth-service Java17",
+			"type": "shell",
+			"command": "powershell",
+			"args": [
+				"-NoProfile",
+				"-Command",
+				"$env:JAVA_HOME=\"C:\\Program Files\\Java\\jdk-17\"; $env:Path=\"C:\\Program Files\\Java\\jdk-17\\bin;\" + $env:Path; & mvn -f backend/auth-service/pom.xml \"-Dmaven.test.skip=true\" spring-boot:run"
+			],
+			"isBackground": true,
+			"group": "build"
+		},
+		{
+			"label": "Run auth-service Java17 skip-tests",
+			"type": "shell",
+			"command": "powershell",
+			"args": [
+				"-NoProfile",
+				"-Command",
+				"$env:JAVA_HOME=\"C:\\Program Files\\Java\\jdk-17\"; $env:Path=\"C:\\Program Files\\Java\\jdk-17\\bin;\" + $env:Path; & mvn \"-Dmaven.test.skip=true\" -f backend/auth-service/pom.xml spring-boot:run"
+			],
+			"isBackground": true,
+			"group": "build"
+		},
+		{
+			"label": "Check infra deps",
+			"type": "shell",
+			"command": "docker",
+			"args": [
+				"compose",
+				"ps",
+				"mongodb",
+				"redis",
+				"kafka"
+			],
+			"isBackground": false
+		},
+		{
+			"label": "Docker info check",
+			"type": "shell",
+			"command": "docker",
+			"args": [
+				"info"
+			],
+			"isBackground": false
+		},
+		{
+			"label": "Diag docker to file",
+			"type": "shell",
+			"command": "powershell",
+			"args": [
+				"-NoProfile",
+				"-Command",
+				"$o=@(); $o += '==docker version=='; $o += (docker version 2>&1 | Out-String); $o += '==compose ps=='; $o += (docker compose ps mongodb redis kafka 2>&1 | Out-String); $o += '==mongodb logs=='; $o += (docker compose logs --tail=80 mongodb 2>&1 | Out-String); $o -join \"`n\" | Set-Content -Path 'logs/docker-mongo-diag.txt'"
+			],
+			"isBackground": false
+		},
+		{
+			"label": "Diag docker to file cmd",
+			"type": "shell",
+			"command": "cmd",
+			"args": [
+				"/c",
+				"cd /d D:\\Projects\\jirathon && (echo ==docker version==> logs\\docker-mongo-diag.txt) && (docker version >> logs\\docker-mongo-diag.txt 2>&1) && (echo.>> logs\\docker-mongo-diag.txt) && (echo ==compose ps==>> logs\\docker-mongo-diag.txt) && (docker compose ps mongodb redis kafka >> logs\\docker-mongo-diag.txt 2>&1) && (echo.>> logs\\docker-mongo-diag.txt) && (echo ==mongodb logs==>> logs\\docker-mongo-diag.txt) && (docker compose logs --tail=100 mongodb >> logs\\docker-mongo-diag.txt 2>&1)"
+			],
+			"isBackground": false
+		},
+		{
+			"label": "Docker service status",
+			"type": "shell",
+			"command": "powershell",
+			"args": [
+				"-NoProfile",
+				"-Command",
+				"Get-Service com.docker.service | Select-Object Status,Name,DisplayName | Format-List"
+			],
+			"isBackground": false
+		},
+		{
+			"label": "Docker desktop process",
+			"type": "shell",
+			"command": "powershell",
+			"args": [
+				"-NoProfile",
+				"-Command",
+				"Get-Process -Name 'Docker Desktop','com.docker.backend' -ErrorAction SilentlyContinue | Select-Object Id,ProcessName,Path | Format-Table -AutoSize"
+			],
+			"isBackground": false
+		},
+		{
+			"label": "Docker backend process",
+			"type": "shell",
+			"command": "powershell",
+			"args": [
+				"-NoProfile",
+				"-Command",
+				"Get-Process -Name \"Docker Desktop\",\"com.docker.backend\" -ErrorAction SilentlyContinue | Select-Object Id,ProcessName,Path | Format-Table -AutoSize"
+			],
+			"isBackground": false
+		},
+		{
+			"label": "Docker process wildcard",
+			"type": "shell",
+			"command": "powershell",
+			"args": [
+				"-NoProfile",
+				"-Command",
+				"Get-Process | Where-Object { $_.ProcessName -like '*docker*' } | Select-Object Id,ProcessName,Path | Format-Table -AutoSize"
+			],
+			"isBackground": false
+		},
+		{
+			"label": "Bring up deps",
+			"type": "shell",
+			"command": "docker",
+			"args": [
+				"compose",
+				"up",
+				"-d",
+				"mongodb",
+				"redis",
+				"kafka"
+			],
+			"isBackground": false
+		},
+		{
+			"label": "docker-status",
+			"type": "shell",
+			"command": "docker ps -a --format \"{{.Names}}|{{.Status}}\" 2>&1; echo EXIT:$LASTEXITCODE",
+			"isBackground": false
+		},
+		{
+			"label": "docker-ps",
+			"type": "shell",
+			"command": "docker ps -a",
+			"isBackground": false
+		},
+		{
+			"label": "Run frontend dev",
+			"type": "shell",
+			"command": "npm",
+			"args": [
+				"run",
+				"dev"
+			],
+			"isBackground": true,
+			"group": "build"
+		},
+		{
+			"label": "Run frontend dev (fixed cwd)",
+			"type": "shell",
+			"command": "cmd",
+			"args": [
+				"/c",
+				"cd /d D:\\Projects\\jirathon\\frontend && npm run dev"
+			],
+			"isBackground": true,
+			"group": "build"
+		},
+		{
+			"label": "Check 5173 listener",
+			"type": "shell",
+			"command": "cmd",
+			"args": [
+				"/c",
+				"netstat -ano | findstr :5173"
+			],
+			"isBackground": false
+		}
+	]
+}

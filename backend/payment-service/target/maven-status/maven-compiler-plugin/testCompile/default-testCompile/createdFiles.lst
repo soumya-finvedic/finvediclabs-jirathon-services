@@ -1,0 +1,3 @@
+com\jirathon\payment\PaymentServiceApplicationTests.class
+com\jirathon\payment\service\CouponServiceTest.class
+com\jirathon\payment\integration\PaymentControllerIntegrationTest.class

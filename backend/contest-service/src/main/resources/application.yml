@@ -1,0 +1,63 @@
+server:
+  port: 8085
+
+spring:
+  kafka:
+    bootstrap-servers: ${KAFKA_BOOTSTRAP_SERVERS:localhost:29092}
+    consumer:
+      group-id: contest-service
+  application:
+    name: contest-service
+
+  data:
+    mongodb:
+      uri: ${MONGO_URI:mongodb://localhost:27018/jirathon_contests}
+      auto-index-creation: true
+
+  servlet:
+    multipart:
+      max-file-size: 5MB
+      max-request-size: 5MB
+
+jwt:
+  secret: ${JWT_SECRET:dGhpc0lzQVNlY3VyZUtleUZvckRldmVsb3BtZW50T25seURvTm90VXNlSW5Qcm9k}
+  issuer: jirathon-auth
+
+contest:
+  supported-languages:
+    - java
+    - cpp
+    - c
+    - python
+    - javascript
+    - typescript
+    - go
+    - rust
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info,metrics
+  endpoint:
+    health:
+      show-details: when-authorized
+
+logging:
+  level:
+    com.jirathon.contest: INFO
+    org.springframework.security: WARN
+  pattern:
+    console: "%d{yyyy-MM-dd HH:mm:ss.SSS} [%thread] [%X{tenantId:-}] %-5level %logger{36} - %msg%n"
+
+
+
+
+kafka:
+  topics:
+    payment-success: payment.success
+
+# ── Payment service (fallback HTTP) ────────────────────────────────────────
+services:
+  payment:
+    base-url: ${PAYMENT_SERVICE_URL:http://localhost:8088/api/v1/payments}

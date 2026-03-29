@@ -1,0 +1,8 @@
+package com.jirathon.user.model.enums;
+
+public enum UserStatus {
+    ACTIVE,
+    INACTIVE,
+    BANNED,
+    PENDING_VERIFICATION
+}
