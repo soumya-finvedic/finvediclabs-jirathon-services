@@ -92,7 +92,7 @@ const routes = [
     meta: { requiresAdmin: true }
   },
   {
-    path: '/admin/contests/create',
+    path: '/admin/contests/create/:id?',
     name: 'CreateContest',
     component: () => import('@/pages/CreateContest.vue'),
     meta: { requiresAdmin: true }

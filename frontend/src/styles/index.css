@@ -118,6 +118,26 @@ body {
   @apply overflow-x-auto;
 }
 
+/* Dark date/time input styling */
+input[type="date"],
+input[type="time"],
+input[type="datetime-local"] {
+  color-scheme: dark;
+}
+
+/* Line clamp utility */
+.line-clamp-2 {
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+/* Admin page card hover scale */
+.hover\:scale-\[1\.02\]:hover {
+  transform: scale(1.02);
+}
+
 .table {
   @apply w-full border-collapse;
 }

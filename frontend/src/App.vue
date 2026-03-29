@@ -1,8 +1,8 @@
 <template>
   <div class="app" :class="{ 'dark': isDark }">
-    <Header @toggle-dark="toggleDark" />
-    <div class="flex min-h-[calc(100vh-80px)]">
-      <Sidebar v-if="!isEditor && !isAuthPage" />
+    <Header v-if="!isAdminPage" @toggle-dark="toggleDark" />
+    <div class="flex" :class="{ 'min-h-screen': isAdminPage, 'min-h-[calc(100vh-80px)]': !isAdminPage }">
+      <Sidebar v-if="!isEditor && !isAuthPage && !isAdminPage" />
       <main class="flex-1">
         <RouterView />
       </main>
@@ -23,6 +23,7 @@ const userStore = useUserStore()
 
 const isEditor = computed(() => route.name === 'ContestEditor')
 const isAuthPage = computed(() => route.path.startsWith('/login'))
+const isAdminPage = computed(() => route.path.startsWith('/admin'))
 
 const toggleDark = () => {
   isDark.value = !isDark.value

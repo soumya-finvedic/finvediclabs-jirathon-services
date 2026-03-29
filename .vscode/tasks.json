@@ -20,7 +20,7 @@
 			"args": [
 				"-NoProfile",
 				"-Command",
-				"$env:JAVA_HOME=\"C:\\Program Files\\Java\\jdk-17\"; $env:Path=\"C:\\Program Files\\Java\\jdk-17\\bin;\" + $env:Path; & mvn -f backend/auth-service/pom.xml \"-Dmaven.test.skip=true\" spring-boot:run"
+				"$env:JAVA_HOME='C:\\Program Files\\Java\\jdk-17'; $env:Path='C:\\Program Files\\Java\\jdk-17\\bin;' + $env:Path; & mvn -f backend/auth-service/pom.xml -Dmaven.test.skip=true spring-boot:run"
 			],
 			"isBackground": true,
 			"group": "build"
@@ -28,11 +28,10 @@
 		{
 			"label": "Run auth-service Java17 skip-tests",
 			"type": "shell",
-			"command": "powershell",
+			"command": "cmd",
 			"args": [
-				"-NoProfile",
-				"-Command",
-				"$env:JAVA_HOME=\"C:\\Program Files\\Java\\jdk-17\"; $env:Path=\"C:\\Program Files\\Java\\jdk-17\\bin;\" + $env:Path; & mvn \"-Dmaven.test.skip=true\" -f backend/auth-service/pom.xml spring-boot:run"
+				"/c",
+				"set JAVA_HOME=C:\\Program Files\\Java\\jdk-17 && set Path=C:\\Program Files\\Java\\jdk-17\\bin;%Path% && mvn -Dmaven.test.skip=true -f backend/auth-service/pom.xml spring-boot:run"
 			],
 			"isBackground": true,
 			"group": "build"
@@ -167,7 +166,7 @@
 			"command": "cmd",
 			"args": [
 				"/c",
-				"cd /d D:\\Projects\\jirathon\\frontend && npm run dev"
+				"cd /d C:\\Users\\FINVEDIC\\Downloads\\jirathon-oldcode\\jirathon\\frontend && npm run dev"
 			],
 			"isBackground": true,
 			"group": "build"
